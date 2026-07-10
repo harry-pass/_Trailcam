@@ -11,21 +11,22 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement Parameters")]
     public float MaxSpeed => SprintInput ? SprintSpeed : WalkSpeed;
     [SerializeField] float WalkSpeed = 4f;
-    [SerializeField] float SprintSpeed = 8f;
+    [SerializeField] float SprintSpeed = 7f;
     [Header("Forward/Backward Movement")]
     [SerializeField] float ForwardAcceleration = 20f;
     [SerializeField] float ForwardDeceleration = 30f;
     [SerializeField] float ForwardReversalSpeed = 12f;
 
     [Header("Strafing Movement")]
-    [SerializeField] float StrafeAcceleration = 20f;
+    [SerializeField] float StrafeAcceleration = 25f;
     [SerializeField] float StrafeDeceleration = 30f;
     [SerializeField] float StrafeReversalSpeed = 70f;
 
     float currentForwardSpeed;
     float currentStrafeSpeed;
-    public Vector3 CurrentVelocity { get; private set; }
-    public float CurrentSpeed {  get; private set; }
+
+    [Header("Jumping Parameters")]
+    [SerializeField] float JumpHeight = 1.5f;
 
     [Header("Player Vision Parameters")]
     public Vector2 VisionSensitivity = new Vector2(0.1f, 0.1f);
@@ -42,6 +43,13 @@ public class PlayerController : MonoBehaviour
             currentPitch = Mathf.Clamp(value, -PitchLimit, PitchLimit);
         }
     }
+
+    [Header("Physics Parameters")]
+    [SerializeField] float GravityScale = 3f;
+    public float VerticalVelocity = 0f;
+    public Vector3 CurrentVelocity { get; private set; }
+    public float CurrentSpeed { get; private set; }
+    public bool IsGrounded => controller.isGrounded; //temp solution, if want to check ground type or distance from ground, will need to implement a raycast solution
 
     [Header("Input")]
     public Vector2 MoveInput;
@@ -84,7 +92,23 @@ public class PlayerController : MonoBehaviour
         CurrentVelocity = forward * currentForwardSpeed + right * currentStrafeSpeed;
         CurrentSpeed = CurrentVelocity.magnitude;
 
-        controller.Move(CurrentVelocity * Time.deltaTime);
+        if (IsGrounded && VerticalVelocity < 0.01f)
+        {
+            VerticalVelocity = -3f;
+        }
+        else
+        { 
+            VerticalVelocity += Physics.gravity.y * GravityScale * Time.deltaTime;
+        }
+
+        Vector3 fullVelocity = new Vector3(CurrentVelocity.x, VerticalVelocity, CurrentVelocity.z);
+        controller.Move(fullVelocity * Time.deltaTime);
+    }
+
+    public void TryJump()
+    {
+        if (IsGrounded == false) return;
+        VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y * GravityScale);
     }
 
     float MoveAxis(float current, float target, float accel, float decel, float reversal)

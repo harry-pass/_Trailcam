@@ -24,6 +24,15 @@ public class Player : MonoBehaviour
         controller.SprintInput = value.isPressed;
     }
 
+    void OnJump(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            Debug.Log("Jump clicked.");
+            controller.TryJump();
+        }
+    }
+
     void OnValidate()
     {
         if (controller == null)
