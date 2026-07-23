@@ -5,11 +5,13 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerVision))]
+[RequireComponent(typeof(Interactor))]
 public class Player : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] PlayerMovement movement;
     [SerializeField] PlayerVision vision;
+    [SerializeField] Interactor interactor;
 
     void OnMove(InputValue value)
     {
@@ -34,6 +36,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnInteract(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            interactor.TryInteract();
+        }
+    }
+
     void OnValidate()
     {
         if (movement == null)
@@ -43,6 +53,10 @@ public class Player : MonoBehaviour
         if (vision == null)
         {
             vision = GetComponent<PlayerVision>();
+        }
+        if (interactor == null)
+        {
+            interactor = GetComponent<Interactor>();
         }
     }
 
