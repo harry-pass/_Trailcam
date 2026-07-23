@@ -3,41 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerVision))]
 public class Player : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] PlayerController controller;
+    [SerializeField] PlayerMovement movement;
+    [SerializeField] PlayerVision vision;
 
     void OnMove(InputValue value)
     {
-        controller.MoveInput = value.Get<Vector2>();
+        movement.MoveInput = value.Get<Vector2>();
     }
 
     void OnLook(InputValue value)
     {
-        controller.VisionInput = value.Get<Vector2>();
+        vision.VisionInput = value.Get<Vector2>();
     }
 
     void OnSprint(InputValue value)
     {
-        controller.SprintInput = value.isPressed;
+        movement.SprintInput = value.isPressed;
     }
 
     void OnJump(InputValue value)
     {
         if (value.isPressed)
         {
-            Debug.Log("Jump clicked.");
-            controller.TryJump();
+            movement.TryJump();
         }
     }
 
     void OnValidate()
     {
-        if (controller == null)
+        if (movement == null)
         {
-            controller = GetComponent<PlayerController>();
+            movement = GetComponent<PlayerMovement>();
+        }
+        if (vision == null)
+        {
+            vision = GetComponent<PlayerVision>();
         }
     }
 

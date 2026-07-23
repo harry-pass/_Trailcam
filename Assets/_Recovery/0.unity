@@ -806,9 +806,8 @@ GameObject:
   - component: {fileID: 1233664702}
   - component: {fileID: 1233664704}
   - component: {fileID: 1233664705}
+  - component: {fileID: 1233664703}
   - component: {fileID: 1233664706}
-  - component: {fileID: 1233664708}
-  - component: {fileID: 1233664707}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -833,6 +832,36 @@ Transform:
   - {fileID: 505365315}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1233664703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233664701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b473f0cc1570649ab6e2ca0d8354ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  WalkSpeed: 4
+  SprintSpeed: 7
+  ForwardAcceleration: 20
+  ForwardDeceleration: 30
+  ForwardReversalSpeed: 70
+  StrafeAcceleration: 25
+  StrafeDeceleration: 30
+  StrafeReversalSpeed: 70
+  JumpHeight: 1.5
+  VisionSensitivity: {x: 0.1, y: 0.1}
+  PitchLimit: 85
+  GravityScale: 3
+  VerticalVelocity: 0
+  MoveInput: {x: 0, y: 0}
+  VisionInput: {x: 0, y: 0}
+  SprintInput: 0
+  fpCamera: {fileID: 505365316}
+  controller: {fileID: 1233664704}
 --- !u!143 &1233664704
 CharacterController:
   m_ObjectHideFlags: 0
@@ -900,50 +929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b8182d5bf458147ae4285afd716d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  movement: {fileID: 1233664708}
-  vision: {fileID: 1233664707}
---- !u!114 &1233664707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1233664701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ffc0db7afe994046ac2c005a09c5bec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  VisionSensitivity: {x: 0.1, y: 0.1}
-  PitchLimit: 85
-  VisionInput: {x: 0, y: 0}
-  fpCamera: {fileID: 505365316}
---- !u!114 &1233664708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1233664701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd89b2815ab52494b9d4d1b26bca1d2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  WalkSpeed: 4
-  SprintSpeed: 7
-  ForwardAcceleration: 20
-  ForwardDeceleration: 30
-  ForwardReversalSpeed: 12
-  StrafeAcceleration: 25
-  StrafeDeceleration: 30
-  StrafeReversalSpeed: 70
-  JumpHeight: 1.5
-  GravityScale: 3
-  VerticalVelocity: 0
-  MoveInput: {x: 0, y: 0}
-  SprintInput: 0
-  controller: {fileID: 1233664704}
+  controller: {fileID: 1233664703}
 --- !u!1 &1382047419 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f4dcb58135368b4a97aed22a051f18a, type: 3}
