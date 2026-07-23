@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Windows;
 
-// Guarantees that a CharacterController component is always attached to the same GameObject as this script (safety measure)
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [Header("Player Movement Parameters")]
     public float MaxSpeed => SprintInput ? SprintSpeed : WalkSpeed;
@@ -28,22 +24,6 @@ public class PlayerController : MonoBehaviour
     [Header("Jumping Parameters")]
     [SerializeField] float JumpHeight = 1.5f;
 
-    [Header("Player Vision Parameters")]
-    public Vector2 VisionSensitivity = new Vector2(0.1f, 0.1f);
-
-    public float PitchLimit = 85f;
-
-    float currentPitch = 0f;
-
-    public float CurrentPitch
-    {
-        get => currentPitch;
-        set
-        {
-            currentPitch = Mathf.Clamp(value, -PitchLimit, PitchLimit);
-        }
-    }
-
     [Header("Physics Parameters")]
     [SerializeField] float GravityScale = 3f;
     public float VerticalVelocity = 0f;
@@ -53,11 +33,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Input")]
     public Vector2 MoveInput;
-    public Vector2 VisionInput;
     public bool SprintInput;
 
     [Header("Components")]
-    [SerializeField] CinemachineCamera fpCamera;
     [SerializeField] CharacterController controller;
 
     void OnValidate()
@@ -71,9 +49,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         MoveUpdate();
-        VisionUpdate();
     }
-
 
     void MoveUpdate()
     {
@@ -97,7 +73,7 @@ public class PlayerController : MonoBehaviour
             VerticalVelocity = -3f;
         }
         else
-        { 
+        {
             VerticalVelocity += Physics.gravity.y * GravityScale * Time.deltaTime;
         }
 
@@ -118,16 +94,5 @@ public class PlayerController : MonoBehaviour
         float rate = isReversing ? reversal : (isStopping ? decel : accel);
         return Mathf.MoveTowards(current, target, rate * Time.deltaTime);
     }
-
-    void VisionUpdate()
-    {
-        Vector2 input = new Vector2(VisionInput.x * VisionSensitivity.x, VisionInput.y * VisionSensitivity.y);
-        
-        //looking up and down
-        CurrentPitch -= input.y;
-        fpCamera.transform.localRotation = Quaternion.Euler(CurrentPitch, 0f, 0f);
-
-        //looking left and right
-        transform.Rotate(Vector3.up * input.x);
-    }
 }
+
