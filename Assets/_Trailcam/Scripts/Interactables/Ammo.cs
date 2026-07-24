@@ -2,8 +2,16 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour, IInteractable
 {
-    public void Interact()
+    [SerializeField] AmmoType type;
+    [SerializeField] int amount = 10;
+
+    public void Interact(Interactor interactor)
     {
-        Debug.Log("Picked up ammo!");
+        if (interactor.TryGetComponent(out Inventory inventory))
+        {
+            Debug.Log($"Picked up {amount} of {type}");
+            inventory.AddAmmo(type, amount);
+            Destroy(gameObject);
+        }
     }
 }
