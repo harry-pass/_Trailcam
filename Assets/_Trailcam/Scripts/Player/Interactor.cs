@@ -10,15 +10,19 @@ public class Interactor : MonoBehaviour
     public Transform InteractorSource;
     public float InteractRange;
     public LayerMask InteractLayer;
+    public LayerMask BlockingMask;
 
     public void TryInteract()
     {
         Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, InteractLayer))
+        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, BlockingMask))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+            if (((1 << hitInfo.collider.gameObject.layer) & InteractLayer) != 0)
             {
-                interactObj.Interact(this);
+                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+                { 
+                    interactObj.Interact(this);
+                }
             }
             
         }
