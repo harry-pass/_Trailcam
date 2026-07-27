@@ -8,6 +8,11 @@ public class MainMenuButtons : MonoBehaviour
         SceneManager.LoadScene("MainGameScene");
     }
 
+    public void TutorialButtonClicked()
+    {
+        SceneManager.LoadScene("TutorialScene");
+    }
+
     public void ExitButtonClicked()
     {
         Debug.Log("Exit button clicked.");
