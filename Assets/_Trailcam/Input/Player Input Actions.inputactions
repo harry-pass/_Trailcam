@@ -991,6 +991,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Menu",
+            "id": "842caa54-7eec-43f9-866c-7006a5fc8b7f",
+            "actions": [
+                {
+                    "name": "PauseMenuOpen",
+                    "type": "Button",
+                    "id": "012c6fd1-be09-46e6-86d4-275ac7b20152",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InventoryMenuOpen",
+                    "type": "Button",
+                    "id": "c18f135a-00ce-49cc-af69-cc5ec631781a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a86f4350-5233-4302-8f9b-8dfc74d84003",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PauseMenuOpen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ae64c99e-c96c-497d-ad41-d11c89a90682",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "InventoryMenuOpen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
