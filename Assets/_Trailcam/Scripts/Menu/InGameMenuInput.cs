@@ -21,11 +21,13 @@ public class InGameMenuInput : MonoBehaviour, PlayerInputActions.IMenuActions
 
     void OnDisable()
     {
-        inputActions.Menu.Disable();
+        inputActions?.Menu.Disable();
     }
 
     void OnDestroy()
     {
+        if (inputActions == null) return;
+
         inputActions.Menu.RemoveCallbacks(this);
         inputActions.Dispose();
     }
