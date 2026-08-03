@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
