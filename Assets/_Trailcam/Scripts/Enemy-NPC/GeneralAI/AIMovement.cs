@@ -12,6 +12,8 @@ public class AIMovement : MonoBehaviour
     [Header("Components")]
     [SerializeField] NavMeshAgent agent;
 
+    public float RemainingDistance => agent.remainingDistance;
+    public bool PathFailed => !agent.pathPending && agent.pathStatus == NavMeshPathStatus.PathInvalid;
     public bool HasArrived => !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance
                                && (!agent.hasPath || agent.velocity.sqrMagnitude < 0.01f);
 
@@ -36,6 +38,7 @@ public class AIMovement : MonoBehaviour
     /// <summary>Snaps the destination onto the NavMesh first. Returns false if no valid point was found nearby.</summary>
     public bool TryMoveTo(Vector3 destination, bool run, float sampleRadius = 2f)
     {
+        if (!agent.isOnNavMesh) return false;
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, sampleRadius, NavMesh.AllAreas))
         {
             MoveTo(hit.position, run);
