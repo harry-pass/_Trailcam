@@ -26,19 +26,16 @@ public class AIHearing : MonoBehaviour
 
     void HandleSoundEmitted(AISoundEvent soundEvent)
     {
-        if (!string.IsNullOrEmpty(ListenForTag) && soundEvent.Source != null && !soundEvent.Source.CompareTag(ListenForTag))
-        {
-            return;
-        }
-
         float distance = Vector3.Distance(transform.position, soundEvent.Position);
         float effectiveRadius = soundEvent.Radius * HearingSensitivity;
+        bool tagOk = string.IsNullOrEmpty(ListenForTag) || soundEvent.Source == null || soundEvent.Source.CompareTag(ListenForTag);
 
-        if (distance <= effectiveRadius)
-        {
-            LastHeardPosition = soundEvent.Position;
-            HasHeardSound = true;
-        }
+        Debug.Log($"[Hearing] {soundEvent.Category} dist={distance:F1} radius={effectiveRadius:F1} tagOk={tagOk}");
+
+        if (!tagOk || distance > effectiveRadius) return;
+
+        LastHeardPosition = soundEvent.Position;
+        HasHeardSound = true;
     }
 
     public bool TryConsumeHeardSound(out Vector3 position)
