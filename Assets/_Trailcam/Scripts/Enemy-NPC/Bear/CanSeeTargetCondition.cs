@@ -148,6 +148,67 @@ public partial class ChaseTargetAction : Action
 }
 
 [Serializable, GeneratePropertyBag]
+[NodeDescription(name: "Attack Target", story: "[Agent] attacks target for [Damage] damage", category: "Action/Combat", id: "3f9a6c21d84e4b7a9e05c1d7b2a68f43")]
+public partial class AttackTargetAction : Action
+{
+    [SerializeReference] public BlackboardVariable<GameObject> Agent;
+    [SerializeReference] public BlackboardVariable<float> Damage = new BlackboardVariable<float>(25f);
+    [SerializeReference] public BlackboardVariable<float> HitRange = new BlackboardVariable<float>(2.2f);  // keep a bit above Chase's AttackRange
+    [SerializeReference] public BlackboardVariable<float> HitAngle = new BlackboardVariable<float>(60f);   // target must be roughly in front
+    [SerializeReference] public BlackboardVariable<float> WindUp = new BlackboardVariable<float>(0.6f);    // pause before the swing lands
+    [SerializeReference] public BlackboardVariable<float> Recovery = new BlackboardVariable<float>(1f);    // punish window after the swing
+    [SerializeReference] public BlackboardVariable<float> TurnSpeed = new BlackboardVariable<float>(240f); // degrees per second during wind-up
+
+    EnemyAgent enemy;
+    Health targetHealth;
+    float hitTime;
+    float endTime;
+    bool hasHit;
+
+    protected override Status OnStart()
+    {
+        enemy = Agent.Value.GetComponent<EnemyAgent>();
+        if (enemy == null || enemy.Perception.Target == null) return Status.Failure;
+
+        targetHealth = enemy.Perception.Target.GetComponent<Health>();
+        if (targetHealth == null || targetHealth.CurrentHealth <= 0f) return Status.Failure;
+
+        enemy.Movement.Stop();
+        hasHit = false;
+        hitTime = Time.time + WindUp.Value;
+        endTime = hitTime + Recovery.Value;
+        return Status.Running;
+    }
+
+    protected override Status OnUpdate()
+    {
+        Transform self = Agent.Value.transform;
+        Vector3 toTarget = Vector3.ProjectOnPlane(enemy.Perception.Target.position - self.position, Vector3.up);
+
+        if (!hasHit)
+        {
+            // Track the player during the wind-up so the swing is committed in their direction.
+            if (toTarget.sqrMagnitude > 0.01f)
+            {
+                Quaternion goal = Quaternion.LookRotation(toTarget.normalized, Vector3.up);
+                self.rotation = Quaternion.RotateTowards(self.rotation, goal, TurnSpeed.Value * Time.deltaTime);
+            }
+
+            if (Time.time < hitTime) return Status.Running;
+
+            // Swing lands: only hurts if the player is still close and in front, so backing off or dodging works.
+            hasHit = true;
+            bool inRange = toTarget.magnitude <= HitRange.Value;
+            bool inFront = Vector3.Angle(self.forward, toTarget) <= HitAngle.Value * 0.5f;
+            if (inRange && inFront) targetHealth.TakeDamage(Damage.Value);
+            Debug.Log($"[Attack] {(inRange && inFront ? "hit" : "missed")} dist={toTarget.magnitude:F1}");
+        }
+
+        return Time.time >= endTime ? Status.Success : Status.Running;
+    }
+}
+
+[Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Forget Target", story: "[Agent] gives up on the target", category: "Action/Perception", id: "7e4d2b91a5c84f30b6e1d8a3c9f52e17")]
 public partial class ForgetTargetAction : Action
 {

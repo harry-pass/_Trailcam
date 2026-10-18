@@ -55,5 +55,34 @@ public class AISight : MonoBehaviour
         lastSeenPosition = target.position;   // navigate to the ground position, not the chest
         return true;
     }
+
+    // Debug view cone: green while the target is visible, yellow otherwise.
+    // Shows in the Scene view, and in the Game view when its Gizmos toggle is on.
+    void OnDrawGizmos()
+    {
+        Transform origin = eyes != null ? eyes : transform;
+        Vector3 forward = Vector3.ProjectOnPlane(origin.forward, Vector3.up);
+        if (forward.sqrMagnitude < 0.0001f) return;
+        forward.Normalize();
+
+        Gizmos.color = LastFailReason == "visible" ? Color.green : Color.yellow;
+        Vector3 pos = origin.position;
+        float half = FieldOfViewAngle * 0.5f;
+        const int segments = 16;
+
+        Vector3 prev = pos + Quaternion.AngleAxis(-half, Vector3.up) * forward * DetectionRange;
+        Gizmos.DrawLine(pos, prev);
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = Mathf.Lerp(-half, half, i / (float)segments);
+            Vector3 next = pos + Quaternion.AngleAxis(angle, Vector3.up) * forward * DetectionRange;
+            Gizmos.DrawLine(prev, next);
+            prev = next;
+        }
+        Gizmos.DrawLine(pos, prev);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(pos, pos + forward * DetectionRange);   // exact look direction
+    }
 }
 

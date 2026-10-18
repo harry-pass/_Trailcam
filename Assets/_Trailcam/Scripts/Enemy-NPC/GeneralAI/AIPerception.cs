@@ -15,6 +15,7 @@ public class AIPerception : MonoBehaviour
     Transform target;
     float lastKnownTime = float.NegativeInfinity;
 
+    public Transform Target => target;
     public bool CanSeeTarget { get; private set; }
     public bool HasKnownTargetPosition { get; private set; }
     public Vector3 LastKnownTargetPosition { get; private set; }

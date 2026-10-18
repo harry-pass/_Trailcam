@@ -2341,7 +2341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc6ecd3fe26235c418b0f5d0e678e538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIHearing
-  HearingSensitivity: 30
+  HearingSensitivity: 3
   ListenForTag: Player
 --- !u!114 &1314311495
 MonoBehaviour:
