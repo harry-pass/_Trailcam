@@ -70,7 +70,6 @@ public class AIPerception : MonoBehaviour
 
     void Remember(Vector3 position, KnowledgeSource source)
     {
-        Debug.Log($"[Perception] remembered {source} at {position}");
         LastKnownTargetPosition = position;
         LastKnowledgeSource = source;
         lastKnownTime = Time.time;

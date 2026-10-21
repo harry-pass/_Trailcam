@@ -6,12 +6,14 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerVision))]
 [RequireComponent(typeof(Interactor))]
+[RequireComponent(typeof(Weapon))]
 public class Player : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] PlayerMovement movement;
     [SerializeField] PlayerVision vision;
     [SerializeField] Interactor interactor;
+    [SerializeField] Weapon weapon;
 
     void OnMove(InputValue value)
     {
@@ -44,6 +46,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnAttack(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            weapon.TryFire();
+        }
+    }
+
     void OnValidate()
     {
         if (movement == null)
@@ -57,6 +67,10 @@ public class Player : MonoBehaviour
         if (interactor == null)
         {
             interactor = GetComponent<Interactor>();
+        }
+        if (weapon == null)
+        {
+            weapon = GetComponent<Weapon>();
         }
     }
 
