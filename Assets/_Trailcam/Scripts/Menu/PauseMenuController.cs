@@ -21,6 +21,17 @@ public class PauseMenuController : MonoBehaviour
         }
     }
 
+    // Unity drops the cursor lock whenever the window/Game view loses focus,
+    // and a lock set in Start is ignored if the Game view isn't focused yet. Re-apply it on refocus.
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus && !IsPaused)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
     public void Toggle()
     {
         if (IsPaused)

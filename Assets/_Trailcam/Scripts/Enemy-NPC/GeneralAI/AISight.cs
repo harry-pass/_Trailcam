@@ -25,6 +25,7 @@ public class AISight : MonoBehaviour
     [SerializeField] float TargetHeightOffset = 1.2f;   // aim at chest; set to 0 if your player's pivot is already centered
 
     public string LastFailReason { get; private set; }
+    public float Range => DetectionRange;
 
     public bool CanSeeTarget(Transform target, out Vector3 lastSeenPosition)
     {
